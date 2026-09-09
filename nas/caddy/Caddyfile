@@ -1,0 +1,10 @@
+{
+	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+immich.mikucat.me {
+	tls {
+		resolvers 1.1.1.1
+	}
+	reverse_proxy http://immich-server:2283
+}

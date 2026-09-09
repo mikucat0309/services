@@ -1,0 +1,20 @@
+appUrl: https://auth.mikucat.me
+
+database:
+  driver: sqlite
+  path: /data/tinyauth.sqlite
+
+auth:
+  users: 'example:$2a$10$lB4TIo7uLWkEhLvbm84RrOp2iF1yeeHDqC3kFYAf16FdNqd6xKRiG'
+  subdomainsEnabled: false
+  trustedProxies: 172.16.0.0/12
+
+oidc:
+  privateKeyPath: /config/oidc/key.pem
+  publicKeyPath: /config/oidc/key.pub
+  clients:
+    immich:
+      name: Immich
+      clientId: immich
+      clientSecretFile: /config/oidc/immich
+      trustedRedirectUris: 'https://immich.mikucat.me/auth/login,https://immich.mikucat.me/user-settings,https://immich.mikucat.me/api/oauth/mobile-redirect,app.immich:///oauth-callback'

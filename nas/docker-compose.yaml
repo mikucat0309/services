@@ -1,0 +1,62 @@
+services:
+  caddy:
+    image: ghcr.io/mikucat0309/caddy:2.11.4
+    environment:
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
+    volumes:
+      - ./caddy:/etc/caddy:ro
+      - caddy_data:/data
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    restart: unless-stopped
+    cap_add:
+      - NET_BIND_SERVICE
+    cap_drop:
+      - ALL
+
+  postgres:
+    image: docker.io/tensorchord/vchord-postgres:pg18-v1.1.1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    volumes:
+      - ./postgres/initdb.d:/docker-entrypoint-initdb.d:ro
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  valkey:
+    image: docker.io/valkey/valkey:9.1.0
+    restart: unless-stopped
+
+  immich-server:
+    image: ghcr.io/immich-app/immich-server:v3.1.0
+    environment:
+      IMMICH_CONFIG_FILE: /config/config.json
+      DB_HOSTNAME: postgres
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_DATABASE_NAME: ${POSTGRES_DB}
+      DB_VECTOR_EXTENSION: vectorchord
+      REDIS_HOSTNAME: valkey
+    volumes:
+      - ./immich:/config:ro
+      - /mnt/data1/immich:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      valkey:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  postgres_data:

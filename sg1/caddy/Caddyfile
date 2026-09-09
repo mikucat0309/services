@@ -1,0 +1,3 @@
+auth.mikucat.me {
+	reverse_proxy http://tinyauth:3000
+}
