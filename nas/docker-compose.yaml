@@ -17,6 +17,8 @@ services:
       - NET_BIND_SERVICE
     cap_drop:
       - ALL
+    security_opt:
+      - no-new-privileges:true
 
   postgres:
     image: docker.io/tensorchord/vchord-postgres:pg18-v1.1.1
@@ -37,6 +39,8 @@ services:
     user: postgres
     cap_drop:
       - ALL
+    security_opt:
+      - no-new-privileges:true
 
   valkey:
     image: docker.io/valkey/valkey:9.1.0
@@ -47,6 +51,8 @@ services:
     read_only: true
     cap_drop:
       - ALL
+    security_opt:
+      - no-new-privileges:true
 
   immich-server:
     image: ghcr.io/immich-app/immich-server:v3.1.0
@@ -71,6 +77,8 @@ services:
     read_only: true
     cap_drop:
       - ALL
+    security_opt:
+      - no-new-privileges:true
 
 volumes:
   caddy_data:
