@@ -10,7 +10,7 @@ services:
       - 80:80
       - 443:443
       - 443:443/udp
-    restart: unless-stopped
+    restart: always
     user: caddy
     read_only: true
     cap_add:
@@ -35,7 +35,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-    restart: unless-stopped
+    restart: always
     user: postgres
     cap_drop:
       - ALL
@@ -46,7 +46,7 @@ services:
     image: docker.io/valkey/valkey:9.1.0
     volumes:
       - valkey_data:/data
-    restart: unless-stopped
+    restart: always
     user: valkey
     read_only: true
     cap_drop:
@@ -72,7 +72,7 @@ services:
         condition: service_healthy
       valkey:
         condition: service_started
-    restart: unless-stopped
+    restart: always
     user: node
     read_only: true
     cap_drop:

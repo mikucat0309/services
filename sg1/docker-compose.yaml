@@ -8,7 +8,7 @@ services:
       - 80:80
       - 443:443
       - 443:443/udp
-    restart: unless-stopped
+    restart: always
     user: caddy
     read_only: true
     cap_add:
@@ -25,7 +25,7 @@ services:
     volumes:
       - ./tinyauth/config:/config:ro
       - tinyauth_data:/data
-    restart: unless-stopped
+    restart: always
     user: tinyauth
     read_only: true
     cap_drop:
