@@ -9,6 +9,8 @@ services:
       - 443:443
       - 443:443/udp
     restart: unless-stopped
+    user: caddy
+    read_only: true
     cap_add:
       - NET_BIND_SERVICE
     cap_drop:
@@ -23,6 +25,7 @@ services:
       - tinyauth_data:/data
     restart: unless-stopped
     user: tinyauth
+    read_only: true
     cap_drop:
       - ALL
 
